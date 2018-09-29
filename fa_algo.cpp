@@ -1,5 +1,6 @@
 #include "fa_algo.h"
 #include <algorithm>    // std::sort
+#include <stdio.h>
 
 fa_algo::fa_algo() {
 
@@ -20,6 +21,105 @@ fa_algo::~fa_algo() {
 
 }
 
+bool fa_algo::isDominate(int i, int j) {
+
+    int count = 0;
+
+    for(int k = 0; k < 2; ++k) {
+    
+        if(candidateSol[i].fitness[k] > candidateSol[j].fitness[k])
+            return false;
+        
+        if(candidateSol[i].fitness[k] < candidateSol[j].fitness[k])
+            ++count;
+        
+    }
+    
+    if(count > 1)
+        return true;
+        
+    return false;
+    
+}
+
+// Fast Non-dominated Sorting
+void fa_algo::FNDSorting() {
+
+    vector<int> L;
+    vector< vector<Solution> > F = vector< vector<Solution> >(100); 
+
+    for(int i = 0; i < parameter.POPULATION; ++i) {
+    
+        for(int j = 0; j < parameter.POPULATION; ++j) {
+    
+            if(i != j) {
+            
+                if(isDominate(i, j)) {
+                
+                    candidateSol[i].S_p.push_back(j);
+                
+                } else if(isDominate(j, i)) {
+                
+                    ++candidateSol[i].n_p;
+                
+                }
+            
+            }
+        
+        }   //end j
+        
+        if(candidateSol[i].n_p == 0) {
+        
+            candidateSol[i].level = 1;
+
+            F[0].push_back(candidateSol[i]);
+
+        }
+        
+    }   //end i
+    
+    int i = 0;
+
+    while(F[i].size() != 0) {
+    
+        vector <Solution> H;
+    
+        for(int j = 0; j < F[i].size(); ++j) {
+        
+            for(int k = 0; k < F[i][j].S_p.size(); ++k) {
+            
+                --candidateSol[F[i][j].S_p[k]].n_p;
+                
+                if(candidateSol[F[i][j].S_p[k]].n_p == 0) {
+                
+                    H.push_back(candidateSol[F[i][j].S_p[k]]);   
+                
+                    candidateSol[F[i][j].S_p[k]].level = i + 2;
+                    
+                }
+            
+            }   //end k
+        
+        }   //end j
+        
+        ++i;
+
+        if(H.size() != 0) {
+        
+            for(int j = 0; j < H.size(); ++j)
+                F[i].push_back(H[j]);   
+        
+        }
+
+    }
+    
+    for(int i = 0; i < parameter.POPULATION; ++i) {
+    
+        candidateSol[i].S_p.clear();
+    
+    }
+        
+}
 
 void fa_algo::initial() {
     
@@ -41,9 +141,19 @@ void fa_algo::initial() {
         candidateSol[i].calFitness();
     
         //TODO fitness
-           
+        
     }
     
+    FNDSorting();
+/*    
+    for(int i = 0; i < parameter.POPULATION; ++i) {    
+    
+        cout << i << " " << candidateSol[i].level << " " << candidateSol[i].n_p << " " << candidateSol[i].fitness[0] << " " << candidateSol[i].fitness[1] << " " << endl;
+        
+    }
+    
+    fgetc(stdin);
+*/    
 }
 
 void fa_algo::candidate(double itr) {
@@ -72,10 +182,15 @@ void fa_algo::candidate(double itr) {
                 candidateSol[i].calFitness();
 
                 //TODO fitness
-
                          
             }
- 
+            /*
+            if(noDominate()) {
+            
+                //TODO random move : levy ?  
+            
+            }
+            */
         }
                
     }
@@ -84,8 +199,6 @@ void fa_algo::candidate(double itr) {
 
 void fa_algo::moveFF(int i, int j) {
 
-    double range = abs(UL[0]-LL[0]);
-    
     double distance = 0.0;
     
     for(int k = 0; k < D; ++k) {
@@ -96,12 +209,15 @@ void fa_algo::moveFF(int i, int j) {
     
     distance = sqrt(distance);
     
-    double beta = 0.8 * exp(-1 * parameter.LAC * pow(distance, 2.0)) + 0.2;
+    double beta = parameter.beta_0 * exp(-1 * parameter.LAC * pow(distance, 2.0));
         
-    for(int k = 0; k < D; ++k) {
+    for(int k = 0; k < D; ++k) {    
     
-		double tmp = 0.5 * gusDistribution() * range;
+        double range = abs(UL[k] - LL[k]);
+    
+		double tmp = parameter.alpha_0 * gusDistribution() * range;
 
+        //TODO I_{ij}^t 
         candidateSol[i].location[k] = candidateSol[i].location[k] + (candidateSol[j].location[k] -  candidateSol[i].location[k]) * beta + tmp;
     
     }

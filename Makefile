@@ -1,5 +1,5 @@
 #ouput file
-EXECUTABLE := poker.out
+EXECUTABLE := monsfa.out
  
 CC := g++
 CFLAGS := -std=c++11 -Wall -O2

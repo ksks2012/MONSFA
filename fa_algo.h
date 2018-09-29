@@ -41,6 +41,9 @@ public:
     ~fa_algo();
 
     void setBF();
+    
+    void FNDSorting();
+        bool isDominate(int , int); 
 
     void initial();
     void candidate(double);

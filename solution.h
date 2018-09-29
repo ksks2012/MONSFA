@@ -27,6 +27,11 @@ public:
     double localFitness;
     
     int dimension;
+    
+    int n_p;
+    vector<int> S_p;
+    
+    int level; //level of pareto
 
 public:
 
