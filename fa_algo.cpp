@@ -201,6 +201,11 @@ void fa_algo::moveFF(int i, int j) {
 
     double distance = 0.0;
     
+    double I = 1;   //difference of fitness
+    
+    for(int k = 0; k < 2; ++k)
+        I *= candidateSol[i].fitness[k] / candidateSol[j].fitness[k];
+    
     for(int k = 0; k < D; ++k) {
     
         distance += (candidateSol[i].location[k] - candidateSol[j].location[k]) * (candidateSol[i].location[k] - candidateSol[j].location[k]);   
@@ -218,7 +223,7 @@ void fa_algo::moveFF(int i, int j) {
 		double tmp = parameter.alpha_0 * gusDistribution() * range;
 
         //TODO I_{ij}^t 
-        candidateSol[i].location[k] = candidateSol[i].location[k] + (candidateSol[j].location[k] -  candidateSol[i].location[k]) * beta + tmp;
+        candidateSol[i].location[k] = candidateSol[i].location[k] + (candidateSol[j].location[k] -  candidateSol[i].location[k]) * beta * I + tmp;
     
     }
 
