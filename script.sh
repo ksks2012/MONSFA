@@ -17,5 +17,10 @@
 make clean all
 
 #gdb --args 
-./monsfa.out 1 250 5 1 1.0 0.25 0.7 500
+
+./monsfa.out 1 250 50 1 1.0 0.25 0.7 500
+
+gnuplot point.gp
+
+#evince MONSFA.pdf
 

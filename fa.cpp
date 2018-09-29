@@ -1,5 +1,6 @@
 #include "parameter.h"
 #include "fa_algo.h"
+#include <fstream>
 
 int main(int argc, char** argv) {
 
@@ -48,8 +49,15 @@ int main(int argc, char** argv) {
         }
 
         //cout << setprecision(16) << fa.bestSol.fitness << endl;
-        fa.bestSol.printData();
-    
+        //fa.bestSol.printData();
+        
+        fstream fout;
+        fout.open("output.dat", ios::out);
+        
+        for(int i = 0; i < parameter.NDS; ++i) 
+            fout << fa.bestSol[i].fitness[0] << " " << fa.bestSol[i].fitness[1] << endl;
+        
+        fout.close();
         ++run;
     
     }

@@ -11,7 +11,6 @@ Solution::Solution(Parameter parameter) {
     this->localFitness = INT_MAX;
     
     this->n_p = 0;
-    //this->S_p = 0;
     this->level = 0;
 
 }

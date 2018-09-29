@@ -14,7 +14,7 @@ class fa_algo {
 
 public:
 
-    Solution bestSol;
+    vector<Solution> bestSol;
 
 private:
 
@@ -32,7 +32,7 @@ private:
     
     //solution
     vector<Solution> candidateSol;
-    vector<Solution> tmpSol;
+    vector<Solution> recordSol;
     
 public:
 
@@ -42,15 +42,15 @@ public:
 
     void setBF();
     
-    void FNDSorting();
-        bool isDominate(int , int); 
+    void FNDSorting(vector<Solution> &, int);
+        bool isDominate(int , int);
 
     void initial();
     void candidate(double);
         void moveFF(int, int);
         double gusDistribution();
             void UNIFORM(double *uni);
-            
+        static bool compare (Solution &, Solution &);
     void checkInit();
 
 
