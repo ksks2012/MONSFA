@@ -146,21 +146,11 @@ void fa_algo::initial() {
         candidateSol[i].setRange(UL, LL);
         candidateSol[i].initLocation();
         candidateSol[i].calFitness();
-        //bestSol[i] = candidateSol[i];
         
     }
 
     FNDSorting(candidateSol, parameter.POPULATION);
-    
-    /*
-    for(int i = 0; i < parameter.POPULATION; ++i) {    
-    
-        cout << i << " " << candidateSol[i].level << " " << candidateSol[i].n_p << " " << candidateSol[i].fitness[0] << " " << candidateSol[i].fitness[1] << " " << endl;
-        
-    }
-    
-    fgetc(stdin);
-   */
+
 }
 
 void fa_algo::candidate(double itr) {
@@ -175,7 +165,7 @@ void fa_algo::candidate(double itr) {
     
     bool dominated = false;
     
-    //
+    //FA
     for(int i = 0; i < parameter.POPULATION; ++i) {
     
         for(int j = 0; j < parameter.POPULATION; ++j) {
@@ -205,6 +195,7 @@ void fa_algo::candidate(double itr) {
                
     }   //end i
     
+    //P_t + Q_t
     for(int i = 0; i < parameter.POPULATION; ++i) {
     
         candidateSol[parameter.POPULATION + i] = recordSol[i];
@@ -213,43 +204,137 @@ void fa_algo::candidate(double itr) {
     
     FNDSorting(candidateSol, parameter.POPULATION * 2);
     
-    //sort by level
-    sort(candidateSol.begin(), candidateSol.end(), compare);
+    for(int i = 0; i < parameter.POPULATION; ++i) {    
     
+        cout << i << " " << candidateSol[i].level << " " << candidateSol[i].n_p << " " << candidateSol[i].fitness[0] << " " << candidateSol[i].fitness[1] << " " << candidateSol[i].crowdingDis << endl;
+        
+    }
+    fgetc(stdin);
+    
+    //sort by level
+    sort(candidateSol.begin(), candidateSol.end(), compareLV);
+
+    //CDS(candidateSol[parameter.POPULATION - 1].level);
+    
+    sort(candidateSol.begin(), candidateSol.end(), compareCDS);
+    //sort(candidateSol.begin(), candidateSol.end(), compareLV);
+    
+    for(int i = 0; i < parameter.POPULATION; ++i) {    
+    
+        cout << i << " " << candidateSol[i].level << " " << candidateSol[i].n_p << " " << candidateSol[i].fitness[0] << " " << candidateSol[i].fitness[1] << " " << candidateSol[i].crowdingDis << endl;
+        
+    }
+    fgetc(stdin);
+    
+    //non-dominated sets <- P_t
     for(int i = 0; i < parameter.POPULATION; ++i) {
     
         bestSol[parameter.NDS + i] = candidateSol[i];
-    
+        
     }
     
     FNDSorting(bestSol, parameter.POPULATION + parameter.NDS);
 
-    sort(bestSol.begin(), bestSol.end(), compare);
+    sort(bestSol.begin(), bestSol.end(), compareLV);
+    
+    //init crowdingDis
+    for(int i = 0; i < parameter.POPULATION; ++i) {
+        
+        candidateSol[i].crowdingDis = 0;
+        
+    }
+    
+}
+
+void fa_algo::CDS(int level) {
+
+    double d_ij, d_ik;
+
+    int index;
+
+    for(int i = 0; i < parameter.POPULATION * 2; ++i) {
+    
+        if(candidateSol[i].level == level) {
+        
+            for(int j = 0; j < parameter.POPULATION * 2; ++j) {
+                
+                double min = INT_MAX;
+                
+                if(i != j) {
+                
+                    d_ij = solutionDistance(candidateSol[i], candidateSol[j]);
+                
+                    if(min > d_ij) {
+                    
+                        d_ij = min;
+                        index = j;
+                    
+                    }
+
+                }
+            
+            }   //end j
+            
+            for(int k = 0; k < parameter.POPULATION * 2; ++k) {
+                
+                double min = INT_MAX;
+                
+                if(i != k && k != index) {
+                
+                    d_ik = solutionDistance(candidateSol[i], candidateSol[k]);
+                
+                    if(min > d_ik)
+                        d_ik = min;
+
+                }
+            
+            }   //end k
+        
+            candidateSol[i].crowdingDis = d_ij + d_ik;
+        
+        }
+    
+    }   //end i
 
 }
 
-bool fa_algo::compare (Solution &a, Solution &b) {
+bool fa_algo::compareLV (Solution &a, Solution &b) {
 
      return a.level < b.level;
       
 }
 
-void fa_algo::moveFF(int i, int j) {
+bool fa_algo::compareCDS (Solution &a, Solution &b) {
+
+    return (a.crowdingDis < b.crowdingDis || a.level < b.level);
+      
+}
+
+//Euclid distance
+double fa_algo::solutionDistance(Solution &x, Solution &y) {
 
     double distance = 0.0;
+    
+    for(int i = 0; i < D; ++i) {
+    
+        distance += (x.location[i] - y.location[i]) * (x.location[i] - y.location[i]);   
+    
+    }
+    
+    distance = sqrt(distance);
+        
+    return distance;
+
+}
+
+void fa_algo::moveFF(int i, int j) {
+
+    double distance = solutionDistance(candidateSol[i], candidateSol[j]);
     
     double I = 1.0;   //difference of fitness
     
     for(int k = 0; k < 2; ++k)
         I *= candidateSol[i].fitness[k] / candidateSol[j].fitness[k];
-    
-    for(int k = 0; k < D; ++k) {
-    
-        distance += (candidateSol[i].location[k] - candidateSol[j].location[k]) * (candidateSol[i].location[k] - candidateSol[j].location[k]);   
-    
-    }
-    
-    distance = sqrt(distance);
     
     double beta = parameter.beta_0 * exp(-1 * parameter.LAC * pow(distance, 2.0));
         
@@ -258,11 +343,19 @@ void fa_algo::moveFF(int i, int j) {
         double range = abs(UL[k] - LL[k]);
     
 		double tmp = parameter.alpha_0 * gusDistribution() * range;
+        
+        if(!(tmp == tmp)) {
 
-        //TODO I_{ij}^t 
-        candidateSol[i].location[k] = candidateSol[i].location[k] + (candidateSol[j].location[k] -  candidateSol[i].location[k]) * beta + tmp;
+            tmp = 0;
+            
+        }
     
+        //TODO I_{ij}^t 
+        candidateSol[i].location[k] = candidateSol[i].location[k] + (candidateSol[j].location[k] -  candidateSol[i].location[k]) * beta * I + tmp;
+        
     }
+    
+    
 
 }
 
@@ -290,9 +383,9 @@ void fa_algo::UNIFORM(double *uni) {
 
     int seed;
     
-    for (int i = 0, x; i < 2; ++i, x = x + 666) {
+    for (int i = 0, x = 0; i < 2; ++i, x = x + 666) {
     
-	    seed = rand() + x;  //+666 for short time random
+	    seed = rand() + x;  //+ for short time random
 	    seed = seed % 1000;
 	    uni[i] = (double)seed;
 	    uni[i] = uni[i] / 1000.0;

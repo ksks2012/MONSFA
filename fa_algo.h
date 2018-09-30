@@ -50,7 +50,10 @@ public:
         void moveFF(int, int);
         double gusDistribution();
             void UNIFORM(double *uni);
-        static bool compare (Solution &, Solution &);
+        void CDS(int);
+        double solutionDistance(Solution &, Solution &);
+        static bool compareLV (Solution &, Solution &);
+        static bool compareCDS (Solution &, Solution &);
     void checkInit();
 
 

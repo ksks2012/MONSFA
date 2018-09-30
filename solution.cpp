@@ -1,4 +1,5 @@
 #include "solution.h"
+#include "stdio.h"
 
 Solution::Solution() {
 
@@ -12,6 +13,7 @@ Solution::Solution(Parameter parameter) {
     
     this->n_p = 0;
     this->level = 0;
+    this->crowdingDis = 0;
 
 }
 
@@ -126,6 +128,14 @@ void Solution::calFitness() {
             cout << "unknown function" << endl;
             break;
     }
+
+    if(!(fitness[0] == fitness[0] && fitness[1] == fitness[1])) {
+    
+        cout << "NAN " << fitness[0] << " " << fitness[1] << " " << location[0] << endl;
+        fgetc(stdin);
+    
+    }
+
 
 }
 

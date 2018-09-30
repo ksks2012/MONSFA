@@ -32,6 +32,7 @@ public:
     vector<int> S_p;
     
     int level; //level of pareto
+    double crowdingDis;
 
 public:
 
