@@ -129,6 +129,7 @@ void Solution::calFitness() {
             break;
     }
 
+    //NAN
     if(!(fitness[0] == fitness[0] && fitness[1] == fitness[1])) {
     
         cout << "NAN " << fitness[0] << " " << fitness[1] << " " << location[0] << endl;

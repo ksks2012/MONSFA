@@ -36,7 +36,7 @@ bool fa_algo::isDominate(int i, int j) {
         
     }
     
-    if(count > 1)
+    if(count >= 1)
         return true;
         
     return false;
@@ -46,8 +46,7 @@ bool fa_algo::isDominate(int i, int j) {
 // Fast Non-dominated Sorting
 void fa_algo::FNDSorting(vector<Solution> &candidateSol, int size) {
 
-    vector<int> L;
-    vector< vector<Solution> > F = vector< vector<Solution> >(1000); 
+    vector< vector<Solution> > F = vector< vector<Solution> >(candidateSol.size() + 1); 
 
     for(int i = 0; i < size; ++i) {
         
@@ -131,10 +130,11 @@ void fa_algo::initial() {
 
         bestSol[i].setDimension(D);
         bestSol[i].setRange(UL, LL);
-        bestSol[i].level = parameter.POPULATION + parameter.NDS;
-
-        for(int j = 0; j < 2; ++j)
-            bestSol[i].fitness[j] = INT_MAX;
+        //bestSol[i].level = parameter.POPULATION + parameter.NDS;
+        bestSol[i].initLocation();
+        bestSol[i].calFitness();
+        //for(int j = 0; j < 2; ++j)
+        //    bestSol[i].fitness[j] = INT_MAX;
 
     }
       
@@ -167,7 +167,9 @@ void fa_algo::candidate(double itr) {
     
     //FA
     for(int i = 0; i < parameter.POPULATION; ++i) {
-    
+        
+        dominated = false;
+               
         for(int j = 0; j < parameter.POPULATION; ++j) {
         
             //I_j > I_i
@@ -176,23 +178,25 @@ void fa_algo::candidate(double itr) {
                 dominated = true;
             
                 moveFF(i, j);
-            
+                
                 candidateSol[i].feasible();
         
                 candidateSol[i].calFitness();
-                         
+        
             }    
             
         }   //end j
         
         if(!dominated) {
+       
+            moveRand(i);
+            
+            candidateSol[i].feasible();
         
-            //TODO random move : levy ?  
-        
-        }   
-        
-        dominated = false;
-               
+            candidateSol[i].calFitness();
+       
+        }    
+
     }   //end i
     
     //P_t + Q_t
@@ -204,38 +208,46 @@ void fa_algo::candidate(double itr) {
     
     FNDSorting(candidateSol, parameter.POPULATION * 2);
     
-    for(int i = 0; i < parameter.POPULATION; ++i) {    
-    
-        cout << i << " " << candidateSol[i].level << " " << candidateSol[i].n_p << " " << candidateSol[i].fitness[0] << " " << candidateSol[i].fitness[1] << " " << candidateSol[i].crowdingDis << endl;
-        
-    }
-    fgetc(stdin);
-    
     //sort by level
     sort(candidateSol.begin(), candidateSol.end(), compareLV);
 
-    //CDS(candidateSol[parameter.POPULATION - 1].level);
+    CDS(candidateSol, candidateSol[parameter.POPULATION - 1].level);
     
     sort(candidateSol.begin(), candidateSol.end(), compareCDS);
     //sort(candidateSol.begin(), candidateSol.end(), compareLV);
-    
-    for(int i = 0; i < parameter.POPULATION; ++i) {    
+/*    
+    for(int i = 0; i < parameter.POPULATION * 2; ++i) {    
     
         cout << i << " " << candidateSol[i].level << " " << candidateSol[i].n_p << " " << candidateSol[i].fitness[0] << " " << candidateSol[i].fitness[1] << " " << candidateSol[i].crowdingDis << endl;
         
     }
     fgetc(stdin);
+*/    
     
     //non-dominated sets <- P_t
     for(int i = 0; i < parameter.POPULATION; ++i) {
-    
+
         bestSol[parameter.NDS + i] = candidateSol[i];
-        
+    
     }
     
-    FNDSorting(bestSol, parameter.POPULATION + parameter.NDS);
+    FNDSorting(bestSol, bestSol.size());
 
     sort(bestSol.begin(), bestSol.end(), compareLV);
+    
+    CDS(bestSol, bestSol[parameter.POPULATION + parameter.NDS - 1].level);
+    
+    sort(bestSol.begin(), bestSol.end(), compareCDS);
+    sort(bestSol.begin(), bestSol.end(), compareLV);
+/*    
+    for(int i = 0; i < bestSol.size(); ++i) {    
+    
+        cout << i << " " << bestSol[i].level << " " << bestSol[i].n_p << " " << bestSol[i].fitness[0] << " " << bestSol[i].fitness[1] << " " << bestSol[i].crowdingDis << endl;
+        
+    }
+//    fgetc(stdin);
+    
+  */  
     
     //init crowdingDis
     for(int i = 0; i < parameter.POPULATION; ++i) {
@@ -246,27 +258,27 @@ void fa_algo::candidate(double itr) {
     
 }
 
-void fa_algo::CDS(int level) {
+void fa_algo::CDS(vector<Solution> &candidateSol, int level) {
 
     double d_ij, d_ik;
 
     int index;
 
-    for(int i = 0; i < parameter.POPULATION * 2; ++i) {
+    for(int i = 0; i < candidateSol.size(); ++i) {
     
-        if(candidateSol[i].level == level) {
-        
-            for(int j = 0; j < parameter.POPULATION * 2; ++j) {
-                
-                double min = INT_MAX;
-                
+        if(candidateSol[i].level < level) {
+            
+            double min = INT_MAX;
+                            
+            for(int j = 0; j < candidateSol.size(); ++j) {
+              
                 if(i != j) {
                 
                     d_ij = solutionDistance(candidateSol[i], candidateSol[j]);
                 
                     if(min > d_ij) {
-                    
-                        d_ij = min;
+
+                        min = d_ij;
                         index = j;
                     
                     }
@@ -275,23 +287,23 @@ void fa_algo::CDS(int level) {
             
             }   //end j
             
-            for(int k = 0; k < parameter.POPULATION * 2; ++k) {
-                
-                double min = INT_MAX;
-                
+            min = INT_MAX;
+            
+            for(int k = 0; k < candidateSol.size(); ++k) {
+   
                 if(i != k && k != index) {
                 
                     d_ik = solutionDistance(candidateSol[i], candidateSol[k]);
                 
                     if(min > d_ik)
-                        d_ik = min;
+                        min = d_ik;
 
                 }
             
             }   //end k
         
             candidateSol[i].crowdingDis = d_ij + d_ik;
-        
+ 
         }
     
     }   //end i
@@ -306,7 +318,13 @@ bool fa_algo::compareLV (Solution &a, Solution &b) {
 
 bool fa_algo::compareCDS (Solution &a, Solution &b) {
 
-    return (a.crowdingDis < b.crowdingDis || a.level < b.level);
+    if(a.crowdingDis == 0 || b.crowdingDis == 0)
+        return a.level < b.level;
+
+    //if(a.level < b.level)
+        //return a.level < b.level;
+
+    return (a.crowdingDis > b.crowdingDis);
       
 }
 
@@ -322,7 +340,7 @@ double fa_algo::solutionDistance(Solution &x, Solution &y) {
     }
     
     distance = sqrt(distance);
-        
+
     return distance;
 
 }
@@ -345,18 +363,37 @@ void fa_algo::moveFF(int i, int j) {
 		double tmp = parameter.alpha_0 * gusDistribution() * range;
         
         if(!(tmp == tmp)) {
-
-            tmp = 0;
-            
+        
+            cout << "tmp error" << endl;
+            fgetc(stdin);
         }
-    
+
         //TODO I_{ij}^t 
-        candidateSol[i].location[k] = candidateSol[i].location[k] + (candidateSol[j].location[k] -  candidateSol[i].location[k]) * beta * I + tmp;
+        candidateSol[i].location[k] = candidateSol[i].location[k] + (candidateSol[j].location[k] -  candidateSol[i].location[k]) * beta + tmp;
         
     }
     
-    
+}
 
+void fa_algo::moveRand(int i) {
+
+    for(int k = 0; k < D; ++k) {    
+    
+        double range = abs(UL[k] - LL[k]);
+    
+		double tmp = 0.001 * gusDistribution() * range;
+        
+        if(!(tmp == tmp)) {
+        
+            cout << "tmp error" << endl;
+            fgetc(stdin);
+        }
+        
+        //TODO I_{ij}^t 
+        candidateSol[i].location[k] = candidateSol[i].location[k] + tmp;
+        
+    }
+    
 }
 
 //Box-Muller

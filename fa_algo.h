@@ -48,9 +48,10 @@ public:
     void initial();
     void candidate(double);
         void moveFF(int, int);
+        void moveRand(int);
         double gusDistribution();
             void UNIFORM(double *uni);
-        void CDS(int);
+        void CDS(vector<Solution> &,int);
         double solutionDistance(Solution &, Solution &);
         static bool compareLV (Solution &, Solution &);
         static bool compareCDS (Solution &, Solution &);
