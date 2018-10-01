@@ -215,14 +215,14 @@ void fa_algo::candidate(double itr) {
     
     sort(candidateSol.begin(), candidateSol.end(), compareCDS);
     //sort(candidateSol.begin(), candidateSol.end(), compareLV);
-/*    
+    /*
     for(int i = 0; i < parameter.POPULATION * 2; ++i) {    
     
         cout << i << " " << candidateSol[i].level << " " << candidateSol[i].n_p << " " << candidateSol[i].fitness[0] << " " << candidateSol[i].fitness[1] << " " << candidateSol[i].crowdingDis << endl;
         
     }
     fgetc(stdin);
-*/    
+    */
     
     //non-dominated sets <- P_t
     for(int i = 0; i < parameter.POPULATION; ++i) {
@@ -238,7 +238,7 @@ void fa_algo::candidate(double itr) {
     CDS(bestSol, bestSol[parameter.POPULATION + parameter.NDS - 1].level);
     
     sort(bestSol.begin(), bestSol.end(), compareCDS);
-    sort(bestSol.begin(), bestSol.end(), compareLV);
+    //sort(bestSol.begin(), bestSol.end(), compareLV);
 /*    
     for(int i = 0; i < bestSol.size(); ++i) {    
     
@@ -264,9 +264,10 @@ void fa_algo::CDS(vector<Solution> &candidateSol, int level) {
 
     int index;
 
+    //TODO Cuboid
     for(int i = 0; i < candidateSol.size(); ++i) {
     
-        if(candidateSol[i].level < level) {
+        if(candidateSol[i].level == level) {
             
             double min = INT_MAX;
                             
@@ -324,7 +325,7 @@ bool fa_algo::compareCDS (Solution &a, Solution &b) {
     //if(a.level < b.level)
         //return a.level < b.level;
 
-    return (a.crowdingDis > b.crowdingDis);
+    return (a.crowdingDis > b.crowdingDis) && a.level <= b.level;
       
 }
 
@@ -361,6 +362,12 @@ void fa_algo::moveFF(int i, int j) {
         double range = abs(UL[k] - LL[k]);
     
 		double tmp = parameter.alpha_0 * gusDistribution() * range;
+        
+        if(!(I == I)) {
+        
+            I = 1;
+            
+        }
         
         if(!(tmp == tmp)) {
         
@@ -462,6 +469,34 @@ void fa_algo::setBF() {
             D = 1;
             LL = vector<double>(D, -1000);
             UL = vector<double>(D, 1000);
+            
+            break;
+            
+        case 2:
+            D = 2;
+            LL = vector<double>(D, -4);
+            UL = vector<double>(D, 4);
+            
+            break;
+        
+        case 3:
+        case 4:
+        case 5:
+        case 7:
+            D = 30;
+            LL = vector<double>(D, 0.0);
+            UL = vector<double>(D, 1.0);
+            
+            break;
+        
+        case 6:
+            D = 30;
+            LL = vector<double>(D, -5.0);
+            UL = vector<double>(D, 5.0);
+            
+            LL[0] = 0;
+            UL[1] = 1;
+            
             
             break;
             

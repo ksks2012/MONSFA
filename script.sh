@@ -8,16 +8,23 @@
 #   @echo "6  alpha_0"
 #   @echo "7  beta_0"
 #   @echo "8  non-dominated set"
+#   @echo "9  real-time gnuplot 1/0" 
 
 #@@@@@@@@@@@@
 
 #function
 #1  Schaffer function N.1 (SCH)
+#2  Fonseca and Fleming function (FON)
+#3  Zitzler, Deb and Thiele's function N.1 (ZDT1)
+#4  Zitzler, Deb and Thiele's function N.2 (ZDT2)
+#5  Zitzler, Deb and Thiele's function N.3 (ZDT3)
+#6  Zitzler, Deb and Thiele's function N.4 (ZDT4)
+#7  Zitzler, Deb and Thiele's function N.6 (ZDT6)
 
 make clean all
 
 #gdb --args 
-./monsfa.out 1 250 50 1 1.0 0.25 0.7 500
+./monsfa.out 1 250 50 1 1.0 0.25 0.7 1000 0
 
 gnuplot point.gp
 

@@ -38,7 +38,9 @@ public:
     double alpha_0;
     double beta_0;
     
-    int NDS;
+    int NDS;    //non-dominated set
+    
+    int RTG;
     
 public:
 

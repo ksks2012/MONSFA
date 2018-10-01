@@ -23,6 +23,8 @@ int main(int argc, char** argv) {
     parameter.setBeta(atof(argv[7]));
     
     parameter.setNDS(atoi(argv[8]));
+    
+    parameter.setRTG(atoi(argv[9]));
 
     int run = 0;
 
@@ -45,7 +47,21 @@ int main(int argc, char** argv) {
             ++itr;
         
             //cout << setprecision(16) << itr << " " << fa.bestSol.fitness << endl;
-        
+            
+            if(parameter.RTG) {
+            
+                fstream fout;
+                fout.open("output.dat", ios::out);
+                
+                for(int i = 0; i < parameter.NDS; ++i) 
+                    fout << fa.bestSol[i].fitness[0] << " " << fa.bestSol[i].fitness[1] << endl;
+                
+                fout.close();
+            
+                system("gnuplot point.gp");            
+            
+            }
+
         }
 
         //cout << setprecision(16) << fa.bestSol.fitness << endl;

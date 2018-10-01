@@ -55,7 +55,7 @@ void Solution::genLocation(int idx) {
 
     double r =  (double) rand() / RAND_MAX;
     
-    location[idx] = r * range + LL[0];
+    location[idx] = r * range + LL[idx];
 
 }
 
@@ -109,6 +109,8 @@ void Solution::printData() {
 
 void Solution::calFitness() {
 
+    double g = 0;
+
     for(int i = 0; i < 2; ++i)
         fitness[i] = 0;
     
@@ -122,6 +124,76 @@ void Solution::calFitness() {
             for(int i = 0; i < dimension; ++i)
                 fitness[1] += pow((location[i] - 2), 2.0);
                        
+            break;
+            
+        case 2:
+            
+            for(int i = 0; i < dimension; ++i)
+                fitness[0] += pow(location[i] - (1.0 / sqrt(3)), 2.0);
+                
+            fitness[0] = 1 - exp(-1 * fitness[0]);
+            
+            for(int i = 0; i < dimension; ++i)
+                fitness[1] += pow(location[i] + (1.0 / sqrt(3)), 2.0);
+                
+            fitness[1] = 1 - exp(-1 * fitness[1]);
+                       
+            break;
+            
+        case 3:
+                
+            fitness[0] = location[0];
+                     
+            for(int i = 1; i < dimension; ++i) {
+                g += location[i];
+            }
+
+            g = 1.0 + ((9.0 * g) / (dimension - 1.0));
+
+            fitness[1] = g * (1.0 - sqrt(location[0] / g));
+            
+            break;
+            
+        case 4:
+                
+            fitness[0] = location[0];
+                     
+            for(int i = 1; i < dimension; ++i) {
+                g += location[i];
+            }
+
+            g = 1.0 + ((9.0 * g) / (dimension - 1.0));
+
+            fitness[1] = g * (1.0 - pow(location[0] / g, 2.0));
+            
+            break;
+            
+        case 5:
+                
+            fitness[0] = location[0];
+                     
+            for(int i = 1; i < dimension; ++i) {
+                g += location[i];
+            }
+
+            g = 1.0 + ((9.0 * g) / (dimension - 1.0));
+
+            fitness[1] = g * (1.0 - sqrt(location[0] / g)) - location[0] / g * sin(10 * PI * location[0]);
+            
+            break;
+            
+        case 6:
+                
+            fitness[0] = location[0];
+                     
+            for(int i = 1; i < dimension; ++i) {
+                g += (location[i] * location[i] - 10 * cos(4 * PI * location[i]));
+            }
+
+            g = 1.0 + (10 * (dimension - 1.0) + g);
+
+            fitness[1] = g * (1.0 - sqrt(location[0] / g));
+            
             break;
 
         default:

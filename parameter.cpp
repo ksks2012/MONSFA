@@ -52,4 +52,10 @@ void Parameter::setNDS(int NDS) {
 
     this->NDS = NDS;
 
+}
+
+void Parameter::setRTG(int RTG) {
+
+    this->RTG = RTG;
+
 } 
