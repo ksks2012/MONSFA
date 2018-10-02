@@ -61,7 +61,8 @@ public:
     void setBeta(double);
     
     void setNDS(int);
-
+    void setRTG(int);
+    
 };
 
 #endif

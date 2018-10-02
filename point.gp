@@ -8,8 +8,8 @@ set key top right Left reverse box
 set title "MONSFA"
 set xlabel "Func 1"
 set ylabel "Func 2"
-set xrange [0:4]
-set yrange [0:4]
+#set xrange [0:4]
+#set yrange [0:4]
 set grid
 #set style data line
 set terminal pdf

@@ -1,5 +1,8 @@
 # MONSFA
 
+v1.2 fix dominated
+     change Crowding Distance Selection
+
 v1.1 test function 
      real time gnuplot
 

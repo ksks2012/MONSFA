@@ -43,18 +43,24 @@ public:
     void setBF();
     
     void FNDSorting(vector<Solution> &, int);
-        bool isDominate(int , int);
+        bool isDominate(Solution &, Solution &);
 
     void initial();
     void candidate(double);
         void moveFF(int, int);
         void moveRand(int);
+        
         double gusDistribution();
             void UNIFORM(double *uni);
+            
         void CDS(vector<Solution> &,int);
+            static bool compareF1(Solution &, Solution &);
+            
         double solutionDistance(Solution &, Solution &);
+        
         static bool compareLV (Solution &, Solution &);
         static bool compareCDS (Solution &, Solution &);
+        
     void checkInit();
 
 
