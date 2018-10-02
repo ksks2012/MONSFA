@@ -24,7 +24,7 @@
 make clean all
 
 #gdb --args 
-./monsfa.out 1 3000 50 7 1.0 0.25 0.7 1000 0
+./monsfa.out 1 20000 50 7 1.0 0.25 0.7 500 0
 
 gnuplot point.gp
 

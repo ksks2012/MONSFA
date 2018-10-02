@@ -482,7 +482,6 @@ void fa_algo::setBF() {
         case 3:
         case 4:
         case 5:
-        case 7:
             D = 30;
             LL = vector<double>(D, 0.0);
             UL = vector<double>(D, 1.0);
@@ -497,6 +496,13 @@ void fa_algo::setBF() {
             LL[0] = 0;
             UL[1] = 1;
             
+            
+            break;
+            
+        case 7:
+            D = 10;
+            LL = vector<double>(D, 0.0);
+            UL = vector<double>(D, 1.0);
             
             break;
             

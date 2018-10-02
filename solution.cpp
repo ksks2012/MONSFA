@@ -110,7 +110,6 @@ void Solution::printData() {
 void Solution::calFitness() {
 
     double g = 0;
-    double x = 0;
 
     for(int i = 0; i < 2; ++i)
         fitness[i] = 0;
@@ -198,10 +197,8 @@ void Solution::calFitness() {
             break;
             
         case 7:
-            
-            x = 6 * PI * location[0];
                 
-            fitness[0] = 1 - exp(-4 * location[0]) * ((10 - 15 * cos(2 * x) + 6 * cos(4 * x) - cos(6 * x)) / 32);
+            fitness[0] = 1 - exp(-4 * location[0]) * pow(sin(6 * PI * location[0]), 6.0);
                      
             for(int i = 1; i < dimension; ++i) {
                 g += location[i];
