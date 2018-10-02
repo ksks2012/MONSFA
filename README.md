@@ -1,9 +1,13 @@
 # MONSFA
 
+v1.3 ZDT6 (TODO)
+
 v1.2 fix dominated
+
      change Crowding Distance Selection
 
 v1.1 test function 
+
      real time gnuplot
 
 v1.0 a feasible version for Schaffer function N.1 (SCH)
@@ -24,7 +28,7 @@ v0.1 FA -> MONSFA
 
 //TODO 
 
-move case 2 in paper
+moving case 2 in paper
 
 {I} calculate method
 

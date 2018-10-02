@@ -1,6 +1,7 @@
 #include "parameter.h"
 #include "fa_algo.h"
 #include <fstream>
+#include <unistd.h>
 
 int main(int argc, char** argv) {
 
@@ -59,7 +60,8 @@ int main(int argc, char** argv) {
                 fout.close();
             
                 system("gnuplot point.gp");            
-            
+                usleep(parameter.NDS * 100);
+
             }
 
         }

@@ -48,9 +48,6 @@ void fa_algo::FNDSorting(vector<Solution> &candidateSol, int size) {
 
     vector< vector<Solution> > F = vector< vector<Solution> >(candidateSol.size() + 1); 
     
-//    for(int i = 0; i < size; ++i)
-//        cout << i << " " << candidateSol[i].fitness[0] << " " << candidateSol[i].fitness[1] << endl;
-
     for(int i = 0; i < size; ++i) {
         
         candidateSol[i].level = 0;
@@ -79,8 +76,6 @@ void fa_algo::FNDSorting(vector<Solution> &candidateSol, int size) {
             candidateSol[i].level = 1;
 
             F[0].push_back(candidateSol[i]);
-
-            //cout << "D1 " << candidateSol[i].fitness[0] << " " << candidateSol[i].n_p << endl;
 
         }
         
@@ -209,6 +204,12 @@ void fa_algo::candidate(double itr) {
     
     }
     
+    for(int i = 0; i < parameter.POPULATION; ++i) {
+
+        bestSol[parameter.NDS + i] = candidateSol[i];
+    
+    }
+    
     FNDSorting(candidateSol, parameter.POPULATION * 2);
     
     //sort by level
@@ -217,23 +218,15 @@ void fa_algo::candidate(double itr) {
     CDS(candidateSol, candidateSol[parameter.POPULATION - 1].level);
     
     sort(candidateSol.begin(), candidateSol.end(), compareCDS);
-    //sort(candidateSol.begin(), candidateSol.end(), compareLV);
-    /*
-    for(int i = 0; i < parameter.POPULATION * 2; ++i) {    
-    
-        cout << i << " " << candidateSol[i].level << " " << candidateSol[i].n_p << " " << candidateSol[i].fitness[0] << " " << candidateSol[i].fitness[1] << " " << candidateSol[i].crowdingDis << endl;
-        
-    }
-    fgetc(stdin);
-    */
-    
+
     //non-dominated sets <- P_t
+    /*
     for(int i = 0; i < parameter.POPULATION; ++i) {
 
         bestSol[parameter.NDS + i] = candidateSol[i];
     
     }
-    
+    */
     FNDSorting(bestSol, bestSol.size());
 
     sort(bestSol.begin(), bestSol.end(), compareLV);
@@ -247,9 +240,9 @@ void fa_algo::candidate(double itr) {
     
         cout << i << " " << bestSol[i].level << " " << bestSol[i].n_p << " " << bestSol[i].fitness[0] << " " << bestSol[i].fitness[1] << " " << bestSol[i].crowdingDis << endl;
         
-    }    
+    }  */  
     //fgetc(stdin);
-    */
+    
     
     
     //init crowdingDis 
@@ -279,21 +272,18 @@ void fa_algo::CDS(vector<Solution> &candidateSol, int level) {
     for(int i = 0; i < candidateSol.size(); ++i) {
     
         if(candidateSol[i].level == level && first) {
-            cout << "begin" << candidateSol[i].level << " " << level << endl;
+
             first = false;
             begin = i;
         
         } else if(candidateSol[i].level != level && !first) {
-            cout << "end" << candidateSol[i].level << " " << level << endl;
+
             end = i - 1;
             break;
         
         }
         end = candidateSol.size();
     }
-    
-    cout << begin << " " << end << endl;
-    //fgetc(stdin);
     
     if(end - begin <= 1)
         return;
@@ -376,7 +366,7 @@ void fa_algo::moveFF(int i, int j) {
         
         if(!(I == I)) {
         
-            I = 1;
+            I = 0;
             
         }
         
@@ -399,7 +389,7 @@ void fa_algo::moveRand(int i) {
     
         double range = abs(UL[k] - LL[k]);
     
-		double tmp = 0.001 * gusDistribution() * range;
+		double tmp = 0.01 * gusDistribution() * range;
         
         if(!(tmp == tmp)) {
         
@@ -466,7 +456,6 @@ void fa_algo::checkInit() {
 
 }
 
-
 /**
   * set benchmark function
   */ 
@@ -484,7 +473,7 @@ void fa_algo::setBF() {
             break;
             
         case 2:
-            D = 2;
+            D = 3;
             LL = vector<double>(D, -4);
             UL = vector<double>(D, 4);
             
@@ -501,7 +490,7 @@ void fa_algo::setBF() {
             break;
         
         case 6:
-            D = 30;
+            D = 10;
             LL = vector<double>(D, -5.0);
             UL = vector<double>(D, 5.0);
             
