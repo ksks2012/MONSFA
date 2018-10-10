@@ -27,6 +27,8 @@ int main(int argc, char** argv) {
     
     parameter.setRTG(atoi(argv[9]));
 
+    parameter.setCD(atoi(argv[10]));
+
     int run = 0;
 
     while(run < RUN_TIME) {
@@ -59,8 +61,11 @@ int main(int argc, char** argv) {
                 
                 fout.close();
             
-                system("gnuplot point.gp");            
-                usleep(parameter.NDS * 100);
+                FILE *fp = popen("gnuplot point.gp", "r"); 
+                if(fp) {
+                    usleep(parameter.NDS * 150);
+                }           
+                pclose(fp);
 
             }
 

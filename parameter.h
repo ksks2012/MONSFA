@@ -41,6 +41,8 @@ public:
     int NDS;    //non-dominated set
     
     int RTG;
+
+    int CD;     //Crowing distance method select
     
 public:
 
@@ -62,6 +64,8 @@ public:
     
     void setNDS(int);
     void setRTG(int);
+
+    void setCD(int );
     
 };
 

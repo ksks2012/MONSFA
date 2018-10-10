@@ -42,7 +42,7 @@ public:
 
     void setBF();
     
-    void FNDSorting(vector<Solution> &, int);
+    void FNDSorting(vector<Solution> &, size_t);
         bool isDominate(Solution &, Solution &);
 
     void initial();
@@ -55,6 +55,7 @@ public:
             
         void CDS(vector<Solution> &,int);
             static bool compareF1(Solution &, Solution &);
+            static bool compareF2(Solution &, Solution &);
             
         double solutionDistance(Solution &, Solution &);
         

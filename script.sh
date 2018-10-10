@@ -9,6 +9,9 @@
 #   @echo "7  beta_0"
 #   @echo "8  non-dominated set"
 #   @echo "9  real-time gnuplot 1/0" 
+#   @echo "10 Crowing distance method"
+#   @echo "     0 own method"
+#   @echo "     1 NSGA-II"
 
 #@@@@@@@@@@@@
 
@@ -24,7 +27,7 @@
 make clean all
 
 #gdb --args 
-./monsfa.out 1 20000 50 7 1.0 0.25 0.7 500 0
+./monsfa.out 1 20000 50 6 1.0 0.25 0.7 500 1 1
 
 gnuplot point.gp
 

@@ -1,5 +1,8 @@
 # MONSFA
 
+v1.5 add Crowing Distance (NSGA-II version)  
+     update makefile
+
 v1.4 fix ZDT6 dimension (ZDT6 needs high iteration to convergence)  
      in different setting of (non-dominated set)  
      figure (FUNC_NUM)-(non-dominated set)-(ITERATION)

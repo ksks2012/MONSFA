@@ -67,7 +67,8 @@ void Solution::feasible() {
         
             location[i] = max(location[i], LL[i]);
             location[i] = min(location[i], UL[i]);  
-        
+            //genLocation(i);
+            
         }
 		
 	}

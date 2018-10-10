@@ -59,3 +59,7 @@ void Parameter::setRTG(int RTG) {
     this->RTG = RTG;
 
 } 
+
+void Parameter::setCD(int CD) {
+    this->CD = CD;
+}
