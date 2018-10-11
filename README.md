@@ -1,5 +1,8 @@
 # MONSFA
 
+v1.6 add problem class for storing functions
+
+
 v1.5 add Crowing Distance (NSGA-II version)  
      update makefile
 

@@ -48,7 +48,7 @@ public:
     
     void feasible();
     
-    void calFitness();
+    //void calFitness();
     
     static double RAND();
     static double RAND(double, double);

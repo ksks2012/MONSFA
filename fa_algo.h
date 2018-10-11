@@ -9,6 +9,7 @@
 #include <climits>
 #include "parameter.h"
 #include "solution.h"
+#include "problem.h"
 
 class fa_algo {
 
@@ -20,13 +21,15 @@ private:
 
     Parameter parameter;
 
-    Solution localBest;
+    //Solution localBest;
+
+    Problem func;
         
     // function lowerlimut upperlimut dimension
     vector <double> LL;
     vector <double> UL;
     
-    int D;
+    //int D;
     
     int itr;
     
@@ -39,9 +42,9 @@ public:
     fa_algo();
     fa_algo(Parameter);
     ~fa_algo();
-
-    void setBF();
     
+    void setBF();
+
     void FNDSorting(vector<Solution> &, size_t);
         bool isDominate(Solution &, Solution &);
 

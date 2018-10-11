@@ -129,10 +129,10 @@ void fa_algo::initial() {
     
     for(size_t j = 0; j < bestSol.size(); ++j) {
 
-        bestSol[j].setDimension(D);
-        bestSol[j].setRange(UL, LL);
+        bestSol[j].setDimension(func.dimension);
+        bestSol[j].setRange(func.UL, func.LL);
         bestSol[j].initLocation();
-        bestSol[j].calFitness();
+        func.calFitness(bestSol[j]);
 
     }    
 
@@ -140,11 +140,10 @@ void fa_algo::initial() {
         
     for(int j = 0; j < parameter.POPULATION; ++j) {
 
-        candidateSol[j].setDimension(D);
-        candidateSol[j].setRange(UL, LL);
+        candidateSol[j].setDimension(func.dimension);
+        candidateSol[j].setRange(func.UL, func.LL);
         candidateSol[j].initLocation();
-        candidateSol[j].calFitness();
-        
+        func.calFitness(candidateSol[j]);
     }
 
     FNDSorting(candidateSol, parameter.POPULATION);
@@ -179,8 +178,8 @@ void fa_algo::candidate(double itr) {
                 
                 candidateSol[j].feasible();
         
-                candidateSol[j].calFitness();
-        
+                func.calFitness(candidateSol[j]);
+
             }    
             
         }   //end i
@@ -190,9 +189,9 @@ void fa_algo::candidate(double itr) {
             moveRand(j);
             
             candidateSol[j].feasible();
-        
-            candidateSol[j].calFitness();
-       
+
+            func.calFitness(candidateSol[j]);
+
         }    
 
     }   //end j
@@ -365,7 +364,7 @@ double fa_algo::solutionDistance(Solution &x, Solution &y) {
 
     double distance = 0.0;
     
-    for(int j = 0; j < D; ++j) {
+    for(int j = 0; j < func.dimension; ++j) {
     
         distance += (x.location[j] - y.location[j]) * (x.location[j] - y.location[j]);   
     
@@ -389,9 +388,9 @@ void fa_algo::moveFF(int j, int i) {
     
     double beta = parameter.beta_0 * exp(-1 * parameter.LAC * pow(distance, 2.0));
         
-    for(int i = 0; i < D; ++i) {    
+    for(int i = 0; i < func.dimension; ++i) {    
     
-        double range = abs(UL[i] - LL[i]);
+        double range = abs(func.UL[i] - func.LL[i]);
     
 		double tmp = parameter.alpha_0 * gusDistribution() * range;
         
@@ -416,9 +415,9 @@ void fa_algo::moveFF(int j, int i) {
 
 void fa_algo::moveRand(int j) {
 
-    for(int i = 0; i < D; ++i) {    
+    for(int i = 0; i < func.dimension; ++i) {    
     
-        double range = abs(UL[i] - LL[i]);
+        double range = abs(func.UL[i] - func.LL[i]);
     
 		double tmp = 0.01 * gusDistribution() * range;
         
@@ -472,14 +471,14 @@ void fa_algo::UNIFORM(double *uni) {
 
 //~~~~~~~~~~~~~~~~~~~
 void fa_algo::checkInit() {
- 
+
     for(int j = 0; j < parameter.POPULATION; ++j) {
     
-        for(int i = 0; i < D; ++i) {
-            if(candidateSol[j].location[i] < LL[i] || candidateSol[j].location[i] > UL[i])
+        for(int i = 0; i < func.dimension; ++i) {
+            if(candidateSol[j].location[i] < func.LL[i] || candidateSol[j].location[i] > func.UL[i])
                 cout << j << " " << i << " x error" << endl;
                 
-            //if(candidateSol[j].velocity[i] < (LL[i] * 2) || candidateSol[j].velocity[i] > (UL[i]  * 2))
+            //if(candidateSol[j].velocity[i] < (func.LL[i] * 2) || candidateSol[j].velocity[i] > (func.UL[i]  * 2))
             //    cout << j << " " << i << " v error" << endl;
         }
         
@@ -493,53 +492,7 @@ void fa_algo::checkInit() {
 void fa_algo::setBF() {
 
     //cout << "function " << parameter.FUNC_NUM << endl;
-    
-    switch(parameter.FUNC_NUM) {
 
-        case 1:
-            D = 1;
-            LL = vector<double>(D, -1000);
-            UL = vector<double>(D, 1000);
-            
-            break;
-            
-        case 2:
-            D = 3;
-            LL = vector<double>(D, -4);
-            UL = vector<double>(D, 4);
-            
-            break;
-        
-        case 3:
-        case 4:
-        case 5:
-            D = 30;
-            LL = vector<double>(D, 0.0);
-            UL = vector<double>(D, 1.0);
-            
-            break;
-        
-        case 6:
-            D = 10;
-            LL = vector<double>(D, -5.0);
-            UL = vector<double>(D, 5.0);
-            
-            LL[0] = 0;
-            UL[0] = 1;
-            
-            
-            break;
-            
-        case 7:
-            D = 10;
-            LL = vector<double>(D, 0.0);
-            UL = vector<double>(D, 1.0);
-            
-            break;
-            
-        default:
-            cout << "unknown function" << endl;
-            break;
-    }
+    func = Problem(parameter.FUNC_NUM);
 
 }
