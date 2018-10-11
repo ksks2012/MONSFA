@@ -22,12 +22,12 @@ public:
 
 private:
 
-    int funcNum;
+    Parameter parameter;
     
 public:
 
     Problem();
-    Problem(int);
+    Problem(Parameter);
 
     void calFitness(Solution &);
 

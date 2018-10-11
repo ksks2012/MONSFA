@@ -15,6 +15,8 @@ Solution::Solution(Parameter parameter) {
     this->level = 0;
     this->crowdingDis = 0;
 
+    fitness = vector<double>(parameter.objectNum, 0.0);
+
 }
 
 Solution::~Solution() {

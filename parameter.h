@@ -33,6 +33,8 @@ public:
     int POPULATION;
     int FUNC_NUM;
 
+    int objectNum;
+
     double LAC;
     
     double alpha_0;
@@ -47,15 +49,19 @@ public:
 public:
 
     Parameter();
+    Parameter(char **);
     ~Parameter();
-    
+
+private:    
     /* setter */
-    
+
     void setITERATION(int);
     
     void setPopultion(int);
     
     void setFuncNum(int);
+
+    void setObjectNum(int);
     
     void setLAC(double);
     

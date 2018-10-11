@@ -1,5 +1,7 @@
 # MONSFA
 
+v1.7 compare function -> function pointer
+
 v1.6 add problem class for storing functions
 
 

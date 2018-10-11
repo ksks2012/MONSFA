@@ -11,6 +11,8 @@
 #include "solution.h"
 #include "problem.h"
 
+typedef bool (*Compare)(Solution &, Solution &) ;
+
 class fa_algo {
 
 public:
@@ -37,6 +39,8 @@ private:
     vector<Solution> candidateSol;
     vector<Solution> recordSol;
     
+    vector<Compare> comparefunc;
+
 public:
 
     fa_algo();

@@ -4,12 +4,13 @@
 #	@echo "2  ITERATION"
 #	@echo "3  POPULATION"
 #	@echo "4  FUNC_NUM"
-#   @echo "5  light absorption coefficient"
-#   @echo "6  alpha_0"
-#   @echo "7  beta_0"
-#   @echo "8  non-dominated set"
-#   @echo "9  real-time gnuplot 1/0" 
-#   @echo "10 Crowing distance method"
+#	@echo "5  number of objective"
+#   @echo "6  light absorption coefficient"
+#   @echo "7  alpha_0"
+#   @echo "8  beta_0"
+#   @echo "9  non-dominated set"
+#   @echo "10  real-time gnuplot 1/0" 
+#   @echo "11 Crowing distance method"
 #   @echo "     0 own method"
 #   @echo "     1 NSGA-II"
 
@@ -27,7 +28,8 @@
 make clean all
 
 #gdb --args 
-./monsfa.out 1 10 50 6 1.0 0.25 0.7 500 1 1
+#            1   2    3 4 5  6   7    8   9 10 11
+./monsfa.out 1   100 50 6 2 1.0 0.25 0.7 500 0 1
 
 gnuplot point.gp
 

@@ -15,7 +15,11 @@ fa_algo::fa_algo(Parameter parameter) {
     bestSol = vector<Solution>(parameter.POPULATION + parameter.NDS, Solution(parameter));
     candidateSol = vector<Solution>(parameter.POPULATION * 2, Solution(parameter));
     recordSol = vector<Solution>(parameter.POPULATION, Solution(parameter));
-    
+    comparefunc = vector<Compare>(parameter.objectNum);
+
+    comparefunc[0] = compareF1;
+    comparefunc[1] = compareF2;
+
 }
 
 fa_algo::~fa_algo() {
@@ -26,7 +30,7 @@ bool fa_algo::isDominate(Solution &a, Solution &b) {
 
     int count = 0;
 
-    for(int i = 0; i < 2; ++i) {
+    for(int i = 0; i < parameter.objectNum; ++i) {
     
         if(a.fitness[i] > b.fitness[i])
             return false;
@@ -127,23 +131,23 @@ void fa_algo::FNDSorting(vector<Solution> &candidateSol, size_t size) {
 
 void fa_algo::initial() {
     
-    for(size_t j = 0; j < bestSol.size(); ++j) {
+    for(size_t i = 0; i < bestSol.size(); ++i) {
 
-        bestSol[j].setDimension(func.dimension);
-        bestSol[j].setRange(func.UL, func.LL);
-        bestSol[j].initLocation();
-        func.calFitness(bestSol[j]);
+        bestSol[i].setDimension(func.dimension);
+        bestSol[i].setRange(func.UL, func.LL);
+        bestSol[i].initLocation();
+        func.calFitness(bestSol[i]);
 
     }    
 
     FNDSorting(bestSol, bestSol.size());
         
-    for(int j = 0; j < parameter.POPULATION; ++j) {
+    for(int i = 0; i < parameter.POPULATION; ++i) {
 
-        candidateSol[j].setDimension(func.dimension);
-        candidateSol[j].setRange(func.UL, func.LL);
-        candidateSol[j].initLocation();
-        func.calFitness(candidateSol[j]);
+        candidateSol[i].setDimension(func.dimension);
+        candidateSol[i].setRange(func.UL, func.LL);
+        candidateSol[i].initLocation();
+        func.calFitness(candidateSol[i]);
     }
 
     FNDSorting(candidateSol, parameter.POPULATION);
@@ -301,18 +305,9 @@ void fa_algo::CDS(vector<Solution> &candidateSol, int level) {
     //NSGA-II
     else if (parameter.CD == 1) {
 
-        for(int i = 0; i < 2; ++i) {
+        for(int i = 0; i < parameter.objectNum; ++i) {
 
-            switch(i) {
-                case 0:
-                    sort(candidateSol.begin() + begin, candidateSol.begin() + end, compareF1);
-                    break;
-                case 1:
-                    sort(candidateSol.begin() + begin, candidateSol.begin() + end, compareF2);
-                    break;
-                default:
-                    break;
-            }         
+            sort(candidateSol.begin() + begin, candidateSol.begin() + end, comparefunc[i]);
 
             candidateSol[begin].crowdingDis = candidateSol[end - 1].crowdingDis = INT_MAX;
 
@@ -383,7 +378,7 @@ void fa_algo::moveFF(int j, int i) {
     
     double I = 1.0;   //difference of fitness
     
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < parameter.objectNum; ++i)
         I *= candidateSol[j].fitness[i] / candidateSol[i].fitness[i];
     
     double beta = parameter.beta_0 * exp(-1 * parameter.LAC * pow(distance, 2.0));
@@ -493,6 +488,6 @@ void fa_algo::setBF() {
 
     //cout << "function " << parameter.FUNC_NUM << endl;
 
-    func = Problem(parameter.FUNC_NUM);
+    func = Problem(parameter);
 
 }

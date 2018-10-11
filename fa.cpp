@@ -9,25 +9,7 @@ int main(int argc, char** argv) {
 
     const int ITERATION = atoi(argv[2]);
 
-    Parameter parameter;
-    
-    parameter.setITERATION(atoi(argv[2]));
-    
-    parameter.setPopultion(atoi(argv[3]));
-    
-    parameter.setFuncNum(atoi(argv[4]));
-    
-    parameter.setLAC(atof(argv[5]));
-    
-    parameter.setAlpha(atof(argv[6]));
-        
-    parameter.setBeta(atof(argv[7]));
-    
-    parameter.setNDS(atoi(argv[8]));
-    
-    parameter.setRTG(atoi(argv[9]));
-
-    parameter.setCD(atoi(argv[10]));
+    Parameter parameter(argv);
 
     int run = 0;
 

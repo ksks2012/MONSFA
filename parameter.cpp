@@ -5,6 +5,31 @@ Parameter::Parameter() {
 
 }
 
+Parameter::Parameter(char **argv) {
+
+        
+    setITERATION(atoi(argv[2]));
+    
+    setPopultion(atoi(argv[3]));
+    
+    setFuncNum(atoi(argv[4]));
+
+    setObjectNum(atoi(argv[5]));
+    
+    setLAC(atof(argv[6]));
+    
+    setAlpha(atof(argv[7]));
+        
+    setBeta(atof(argv[8]));
+    
+    setNDS(atoi(argv[9]));
+    
+    setRTG(atoi(argv[10]));
+
+    setCD(atoi(argv[11]));
+
+}
+
 Parameter::~Parameter() {
 
 }
@@ -27,8 +52,13 @@ void Parameter::setFuncNum(int FUNC_NUM) {
 
 }
 
-
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void Parameter::setObjectNum(int objectNum) {
+
+    this->objectNum = objectNum;
+
+}
 
 void Parameter::setLAC(double LAC) {
 

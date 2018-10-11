@@ -22,7 +22,7 @@ public:
     
     double range;
     
-    double fitness[2];
+    vector<double> fitness;
     
     double localFitness;
     

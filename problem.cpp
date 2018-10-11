@@ -4,11 +4,11 @@ Problem::Problem() {
 
 }
 
-Problem::Problem(int funcNum) {
+Problem::Problem(Parameter parameter) {
 
-    this->funcNum = funcNum;
+    this->parameter = parameter;
     
-    switch(funcNum) {
+    switch(parameter.FUNC_NUM) {
 
         case 1:
             dimension = 1;
@@ -59,14 +59,13 @@ Problem::Problem(int funcNum) {
 }
 
 void Problem::calFitness(Solution &solution) {
-
     
     double g = 0;
 
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < parameter.objectNum; ++i)
         solution.fitness[i] = 0;
     
-    switch(funcNum) {
+    switch(parameter.FUNC_NUM) {
         
         case 1:
 

@@ -35,7 +35,7 @@ SRCDIRS   := .
 SRCEXTS   := .cpp
 # The flags used by the cpp (man cpp for more).
 # CPPFLAGS  := -Wall -Werror # show all warnings and take them as errors
-CPPFLAGS  := -Wall -std=c++11 -pg -O2
+CPPFLAGS  := -Wall -std=c++11 -g -O2
 # The compiling flags used only for C.
 # If it is a C++ program, no need to set these flags.
 # If it is a C and C++ merging program, set these flags for the C parts.
@@ -118,6 +118,6 @@ rebuild: clean all
 clean :
 	@$(RM) *.o *.d
 cleanall: clean
-	@$(RM) $(PROGRAM) $(PROGRAM).exe
+	@$(RM) $(PROGRAM)
 ### End of the Makefile ##  Suggestions are welcome  ## All rights reserved ###
 ###############################################################################
