@@ -1,7 +1,6 @@
 #include "parameter.h"
 #include "fa_algo.h"
-#include <fstream>
-#include <unistd.h>
+
 
 int main(int argc, char** argv) {
 
@@ -22,47 +21,27 @@ int main(int argc, char** argv) {
         fa.setBF();
         
         fa.initial();
-        
-        fa.checkInit();
-    
+            
         while(itr < ITERATION) {
                               
-            fa.candidate(itr);
+            fa.candidate((itr) / ITERATION);
                 
             ++itr;
         
             //cout << setprecision(16) << itr << " " << fa.bestSol.fitness << endl;
             
+
             if(parameter.RTG) {
-            
-                fstream fout;
-                fout.open("output.dat", ios::out);
-                
-                for(int i = 0; i < parameter.NDS; ++i) 
-                    fout << fa.bestSol[i].fitness[0] << " " << fa.bestSol[i].fitness[1] << endl;
-                
-                fout.close();
-            
-                FILE *fp = popen("gnuplot point.gp", "r"); 
-                if(fp) {
-                    usleep(parameter.NDS * 150);
-                }           
-                pclose(fp);
+                        
+                fa.bestSol.gnuplot();
 
             }
 
         }
 
         //cout << setprecision(16) << fa.bestSol.fitness << endl;
-        //fa.bestSol.printData();
+        fa.bestSol.printData();
         
-        fstream fout;
-        fout.open("output.dat", ios::out);
-        
-        for(int i = 0; i < parameter.NDS; ++i) 
-            fout << fa.bestSol[i].fitness[0] << " " << fa.bestSol[i].fitness[1] << endl;
-        
-        fout.close();
         ++run;
     
     }

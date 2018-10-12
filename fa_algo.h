@@ -7,39 +7,28 @@
 #include <iomanip>
 #include <cstdlib>
 #include <climits>
+
 #include "parameter.h"
 #include "solution.h"
 #include "problem.h"
-
-typedef bool (*Compare)(Solution &, Solution &) ;
+#include "population.h"
 
 class fa_algo {
 
 public:
 
-    vector<Solution> bestSol;
+    Population bestSol;
 
 private:
 
     Parameter parameter;
 
-    //Solution localBest;
-
     Problem func;
+
+    Population candidateSol; 
+    Population recordSol;   
         
-    // function lowerlimut upperlimut dimension
-    vector <double> LL;
-    vector <double> UL;
-    
-    //int D;
-    
     int itr;
-    
-    //solution
-    vector<Solution> candidateSol;
-    vector<Solution> recordSol;
-    
-    vector<Compare> comparefunc;
 
 public:
 
@@ -49,27 +38,8 @@ public:
     
     void setBF();
 
-    void FNDSorting(vector<Solution> &, size_t);
-        bool isDominate(Solution &, Solution &);
-
     void initial();
     void candidate(double);
-        void moveFF(int, int);
-        void moveRand(int);
-        
-        double gusDistribution();
-            void UNIFORM(double *uni);
-            
-        void CDS(vector<Solution> &,int);
-            static bool compareF1(Solution &, Solution &);
-            static bool compareF2(Solution &, Solution &);
-            
-        double solutionDistance(Solution &, Solution &);
-        
-        static bool compareLV (Solution &, Solution &);
-        static bool compareCDS (Solution &, Solution &);
-        
-    void checkInit();
 
 
 private:

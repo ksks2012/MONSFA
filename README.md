@@ -1,5 +1,8 @@
 # MONSFA
 
+v1.8 population class  
+     change alpha calculate method
+    
 v1.7 compare function -> function pointer
 
 v1.6 add problem class for storing functions
